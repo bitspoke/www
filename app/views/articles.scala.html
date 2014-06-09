@@ -1,0 +1,9 @@
+@(articles: List[Article])
+
+@main("Articles") {
+<ul>
+    @for(a <- articles) {
+        <li>@a.author</li>
+    }
+</ul>
+}
