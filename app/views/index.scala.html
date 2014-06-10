@@ -1,24 +1,3 @@
-@(db: Database)
-
 @main("BitSpoke") {
-
-    <table>
-        <tr>
-            <th>Database</th>
-            <td>@db.name</td>
-        </tr>
-        <tr>
-            <th>Version</th>
-            <td>@db.client</td>
-        </tr>
-        <tr>
-            <th>Address</th>
-            <td>@db.address</td>
-        </tr>
-        <tr>
-            <th>Connected</th>
-            <td>@db.connected</td>
-        </tr>
-    </table>
-
+    <a href="@routes.ArticleController.list()">Articles</a>
 }
