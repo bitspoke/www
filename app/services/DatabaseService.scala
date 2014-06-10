@@ -1,37 +1,21 @@
 package services
 
+import com.mongodb.casbah.{MongoClientURI, MongoClient}
+import com.mongodb.casbah.gridfs.Imports._
+import play.api.Play
 import models.Database
 
-trait DatabaseService {
-
-  def status: Database
-
-}
-
-
-class InMemoryDatabaseService extends DatabaseService {
-
-  def status: Database =
-    new Database(
-      "InMemory",
-      "n.a.",
-      "n.a.",
-      true
-    )
-}
-
-
-
-import com.mongodb.casbah.{MongoClientURI, MongoClient}
-import play.api.Play
-
-class MongoDatabaseService extends DatabaseService {
+object MongoDatabase {
 
   val client = MongoClient(
     MongoClientURI(
       Play.current.configuration.getString("db.default.uri").getOrElse("mongodb://localhost")
     )
   )
+
+  val db = client("bitspoke")
+
+  val gridfs = GridFS(db)
 
   def status =
     new Database(

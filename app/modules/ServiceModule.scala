@@ -6,9 +6,12 @@ import scaldi.play.condition.{inDevMode, inTestMode, inProdMode}
 
 class ServiceModule extends Module {
 
-  binding to new MongoArticleService
+  binding to new ArticleMongoService
 
-  bind [DatabaseService] /*when (inProdMode)*/ to new MongoDatabaseService
+  // binding to new CommentMongoService
 
-  // bind [DatabaseService] when (inDevMode or inTestMode) to new InMemoryDatabaseService
+
+  bind [ArticleService] /*when (inProdMode)*/ to new ArticleMongoService
+
+  // bind [ArticleService] /*when (inDevMode or inTestMode)*/ to new FakeArticleService
 }

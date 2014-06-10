@@ -1,9 +1,11 @@
-@(articles: List[Article])
+@(articles: Iterable[Article])
 
 @main("Articles") {
-<ul>
-    @for(a <- articles) {
-        <li>@a.author</li>
+    @if(!articles.isEmpty) {
+        <ul>
+        @for(a <- articles) {
+            <li>@a.author<br>@a.summary</li>
+        }
+        </ul>
     }
-</ul>
 }

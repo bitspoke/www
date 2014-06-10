@@ -1,16 +1,12 @@
 package controllers
 
 import play.api.mvc._
-import scaldi.Injector
-import scaldi.Injectable._
-import services.DatabaseService
 
-class ApplicationController(implicit val injector:Injector) extends Controller {
 
-  val db = inject[DatabaseService]
+class ApplicationController extends Controller {
 
   def index = Action {
-    Ok(views.html.index(db.status))
+    Ok(views.html.index())
   }
 
 }
