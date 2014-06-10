@@ -5,7 +5,7 @@ import scaldi.{Injectable, Injector}
 import services.ArticleService
 
 
-class ArticleController(implicit val injector:Injector) extends Controller with Injectable {
+class ArticleController(implicit val i: Injector) extends Controller with Injectable {
 
   val service = inject[ArticleService]
 
