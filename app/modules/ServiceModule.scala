@@ -14,4 +14,9 @@ class ServiceModule extends Module {
   bind [ArticleService] /*when (inProdMode)*/ to new ArticleMongoService
 
   // bind [ArticleService] /*when (inDevMode or inTestMode)*/ to new FakeArticleService
+
+
+  bind [MongoDatabase] /*when (inProdMode)*/ to new RealMongoDatabase
+
+  // bind [MongoDatabase] /*when (inDevMode or inTestMode)*/ to new FakeMongoDatabase
 }
