@@ -4,9 +4,13 @@
     @if(!articles.isEmpty) {
         <ul>
         @for(a <- articles) {
-            <li>@a.oid</li>
-            <li>@a.author</li>
-            <li>@a.summary</li>
+            <li>
+                @a.oid<br>
+                @a.author<br>
+                @a.title<br>
+                @a.epoch<br>
+                @a.summary<br>
+            </li>
         }
         </ul>
     }

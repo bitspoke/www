@@ -12,5 +12,6 @@ scalacOptions += "-target:jvm-1.7"
 
 libraryDependencies ++= Seq(
   "org.mongodb" % "casbah_2.11" % "2.7.2",
-  "org.scaldi" % "scaldi-play_2.11" % "0.3.3"
+  "org.scaldi" % "scaldi-play_2.11" % "0.3.3",
+  "com.github.fakemongo" % "fongo" % "1.5.1" % "test"
 )
