@@ -2,16 +2,15 @@
 
 @main("Articles") {
     @if(!articles.isEmpty) {
-        <ul>
+        <div class="list-group">
         @for(a <- articles) {
-            <li>
-                @a.oid<br>
-                @a.author<br>
-                @a.title<br>
-                @a.epoch<br>
-                @a.summary<br>
-            </li>
+            <div class="list-group-item">
+                <h1>@a.title</h1>
+                <p>@a.author - @a.epoch</p>
+                <p>@a.summary</p>
+                <a class="btn btn-link">Read more</a>@* href="@routes.ArticleController.read/@a.oid" *@
+            </div>
         }
-        </ul>
+        </div>
     }
 }
