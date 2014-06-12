@@ -1,10 +1,9 @@
 package models
 
 
-class Article(val oid:String,
-              val series:String,
-              val title:Option[String],
-              val summary:Option[String],
+class Article(val oid:Option[String],
               val author:String,
+              val title:String,
               val epoch:Long,
+              val summary:String,
               val content:String)

@@ -3,7 +3,6 @@ package services
 import models.Article
 
 
-
 trait ArticleService {
 
   def save(a: Article): Unit
@@ -17,32 +16,33 @@ import scaldi.Injector
 import scaldi.Injectable.inject
 import com.mongodb.casbah.Imports._
 
-class ArticleMongoService(implicit val i: Injector) extends ArticleService {
-  val mongo = inject[MongoDatabase]
-  val articles = mongo.db("articles")
+class MongoArticleService(implicit val injector: Injector) extends ArticleService {
+  val mongo = inject[Mongo]
 
-  def save(a: Article) = articles += MongoDBObject (
-    "series" -> a.series,
-    "title" -> a.title,
-    "summary" -> a.summary,
-    "author" -> a.author
-  )
+  def save(a: Article) = {
+    val obj = MongoDBObject (      
+      "title" -> a.title,
+      "author" -> a.author,      
+      "epoch" -> a.epoch,
+      "summary" -> a.summary,
+      "content" -> a.content
+    )
+    if (a.oid.isDefined) obj.put("_oid", new ObjectId(a.oid.get))
+    (mongo.db("articles") += obj)
+  }
 
 
   def list: Iterable[Article] =
-    for (article <- articles) yield newArticle(article)
-
-
-  def newArticle(dbObj: DBObject) =
-    new Article(
-      dbObj.as[Any]("_id").toString,
-      dbObj.as[String]("series"),
-      dbObj.getAs[String]("title"), // returns an Option[String]
-      dbObj.getAs[String]("summary"), // returns an Option[String]
-      dbObj.as[String]("author"),
-      0L, /*new DateTime(article.as[Date]("uploadDate")),*/
-      "???"
-    )
+    for (obj <- mongo.db("articles"))
+    yield
+      new Article (
+        obj.getAs[Any]("_id").map(_.toString), // TODO shouldn't it be as[String] ???        
+        obj.as[String]("author"),
+        obj.as[String]("title"),
+        obj.as[Number]("epoch").longValue(),
+        obj.as[String]("summary"),
+        obj.as[String]("content")
+      )
 }
 
 

@@ -2,7 +2,7 @@ package services
 
 
 
-trait MongoDatabase {
+trait Mongo {
   import com.mongodb.casbah.MongoDB
   def db: MongoDB
 }
@@ -10,7 +10,7 @@ trait MongoDatabase {
 
 
 
-class RealMongoDatabase extends MongoDatabase {
+class RealMongo extends Mongo {
   import com.mongodb.casbah.{MongoClientURI, MongoClient}
   import play.api.Play
 
@@ -22,12 +22,6 @@ class RealMongoDatabase extends MongoDatabase {
 }
 
 
-
-class FakeMongoDatabase extends MongoDatabase {
-  // see https://github.com/fakemongo/fongo
-
-  val db = ???
-}
 
 
 
