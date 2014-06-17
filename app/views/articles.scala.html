@@ -1,16 +1,12 @@
-@(articles: Iterable[Article])
-
 @main("Articles") {
-    @if(!articles.isEmpty) {
-        <div class="list-group">
-        @for(a <- articles) {
-            <div class="list-group-item">
-                <h1>@a.title</h1>
-                <p>@a.author - @a.epoch</p>
-                <p>@a.summary</p>
-                <a class="btn btn-link">Read more</a>@* href="@routes.ArticleController.read/@a.oid" *@
+    <div ng-controller="ArticleCntrl">
+        <div class="list-group" ng-hide="isEmpty()">
+            <div class="list-group-item" ng-repeat="article in articles">
+                <h1>{{article.title}}</h1>
+                <p>{{article.author}} - {{article.epoch}}</p>
+                <p>{{article.summary}}</p>
+                <a class="btn btn-link">Read more</a>@* href="@routes.ArticleController.read/@article.oid" *@
             </div>
-        }
         </div>
-    }
+    </div>
 }
