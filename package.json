@@ -1,0 +1,21 @@
+{
+  "name": "bitspoke-www",
+  "description": "Public website of BitSpoke Ltd",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bitspoke/www.git"
+  },
+  "dependencies": {},
+  "private": true,
+  "devDependencies": {
+    "karma": "^0.12.16",
+    "karma-chrome-launcher": "^0.1.4",
+    "karma-jasmine": "^0.1.5"
+  },
+  "scripts": {
+
+      "pretest": "npm install",
+      "test": "karma start test/assets/javascripts/karma.conf.js"
+  }
+}

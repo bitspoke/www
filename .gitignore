@@ -14,4 +14,6 @@ dist
 /RUNNING_PID
 /.settings
 /data
+<<<<<<< HEAD
 *~
+/node_modules

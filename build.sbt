@@ -2,7 +2,7 @@ name := """bitspoke-www"""
 
 organization := "bitspoke"
 
-version := "1.0-SNAPSHOT"
+version := "0.0.1"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
@@ -19,3 +19,21 @@ libraryDependencies ++= Seq(
   "org.webjars" % "angularjs" % "1.2.17",
   "com.github.fakemongo" % "fongo" % "1.5.1" % "test"
 )
+
+
+// JsEngineKeys.engineType := JsEngineKeys.EngineType.Node
+
+lazy val testJs = taskKey[Int]("Test Javascripts")
+
+testJs in Test := {
+    "npm test" !
+}
+
+test := Def.taskDyn {
+  (testJs in Test).value match {
+    case 0 => Def.task {
+      (test in Test).value
+    }
+    case _ => Def.task()
+  }
+}.value
