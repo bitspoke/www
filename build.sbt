@@ -26,7 +26,7 @@ libraryDependencies ++= Seq(
 lazy val testJs = taskKey[Int]("Test Javascripts")
 
 testJs in Test := {
-    "npm test" !
+    "npm run-script test-single-run" !
 }
 
 test := Def.taskDyn {

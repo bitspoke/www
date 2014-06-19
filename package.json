@@ -11,11 +11,13 @@
   "devDependencies": {
     "karma": "^0.12.16",
     "karma-chrome-launcher": "^0.1.4",
-    "karma-jasmine": "^0.1.5"
+    "karma-jasmine": "^0.1.5",
+    "karma-junit-reporter": "^0.2.2"
   },
   "scripts": {
 
       "pretest": "npm install",
-      "test": "karma start test/assets/javascripts/karma.conf.js"
+      "test": "karma start test/assets/javascripts/karma.conf.js",
+      "test-single-run": "karma start test/assets/javascripts/karma.conf.js --single-run"
   }
 }

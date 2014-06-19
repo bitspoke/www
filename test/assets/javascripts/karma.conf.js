@@ -5,21 +5,21 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '../../..',
+    basePath: "../../..",
 
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
+    frameworks: ["jasmine"],
 
 
     // list of files / patterns to load in the browser
     files: [
-      'target/web/web-modules/main/webjars/lib/angularjs/angular.js',  
-      // 'target/web/web-modules/main/webjars/lib/angularjs/angular-route.js',
-      'target/web/web-modules/main/webjars/lib/angularjs/angular-mocks.js',
-      'public/javascripts/*.js',
-      'test/assets/javascripts/unit/*.js'
+      "target/web/web-modules/main/webjars/lib/angularjs/angular.js",  
+      // "target/web/web-modules/main/webjars/lib/angularjs/angular-route.js",
+      "target/web/web-modules/main/webjars/lib/angularjs/angular-mocks.js",
+      "public/javascripts/*.js",
+      "test/assets/javascripts/unit/*.js"
     ],
 
 
@@ -37,9 +37,14 @@ module.exports = function(config) {
 
 
     // test results reporter to use
-    // possible values: 'dots', 'progress'
+    // possible values: "dots", "progress"
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ["progress", "junit"],
+
+    junitReporter: {
+      outputFile: "target/test-reports/assets.xml",
+      suite: ""
+    },
 
 
     // web server port
@@ -61,11 +66,11 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ["Chrome"],
 
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: true
+    singleRun: false
   });
 };
