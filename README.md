@@ -29,6 +29,7 @@ First build
 Once installed all the above development tools, then
 
 ```shell
+sbt clean
 npm install
-sbt clean dist
+sbt test
 ```
