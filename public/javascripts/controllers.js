@@ -4,13 +4,18 @@ var bitspokeApp = angular.module("bitspokeApp", []);
 
 bitspokeApp.controller("ArticleCtrl", function ($scope) {
 
-    $scope.articles = [
-        {"title": "title", "author": "author", "epoch": 431276831, "summary": "summary"},
-        {"title": "title", "author": "author", "epoch": 431276831, "summary": "summary"},
-        {"title": "title", "author": "author", "epoch": 431276831, "summary": "summary"}
-    ];
+  $scope.articles = [];
 
-    $scope.isEmpty = function() {
-        $scope.article.length === 0
-    }
+  $scope.articlesIsEmpty = function() {
+    return $scope.articles.length == 0;
+  }
+
+  $scope.canSaveArticle = function(article) {
+    return angular.isObject(article) && angular.isString(article.title)
+  }
+
+  $scope.save = function(article) {
+    $scope.articles.push(article);
+    $scope.article = null;    
+  }
 });
