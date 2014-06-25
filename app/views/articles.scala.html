@@ -1,27 +1,38 @@
-@main("Articles") {
-  <ul class="nav nav-pills">
-    <li><a href="#">Add</a></li>
-    <li><a href="#">List</a></li>
-  </ul>
-  <div ng-controller="ArticleCtrl">
-    <form role="form">
-      <div class="form-group">
-        <label for="title">Title</label>
-        <input type="text" class="form-control" id="title" placeholder="Enter title" ng-model="newArticle.title">
+@main("Articles") { 
+  <div ng-controller="articleCtrl">
+    <div class="page-header">
+      <div class="btn-group pull-right">
+        <button type="button" class="btn btn-default" ng-class="getClassByState('list')" ng-click="setState('list')"><span class="fa fa-list"></span> List All</button>
+        <button type="button" class="btn btn-default" ng-class="getClassByState('add')" ng-click="setState('add')"><span class="fa fa-file-o"></span> Create</button>        
       </div>
-      <div class="form-group">
-        <label for="content">Content</label>
-        <textarea class="form-control" id="content" placeholder="Enter content" ng-model="newArticle.content"></textarea>
+      <h1>Articles <small>written by best authors</small></h1>
+    </div>
+
+    <div ng-switch on="state">
+
+      <div ng-switch-when="add">    
+        <form role="form">
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="title" placeholder="Enter title" ng-model="newArticle.title">
+          </div>
+          <div class="form-group">
+            <label for="content">Content</label>
+            <textarea class="form-control" id="content" placeholder="Enter content" ng-model="newArticle.content"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" ng-click="save(newArticle)"><span class="fa fa-save"></span> Save</button>
+        </form>
       </div>
-      <button type="submit" class="btn btn-primary" ng-click="save(newArticle)">Save</button>
-    </form>
-    <div class="list-group" ng-hide="articlesIsEmpty()">
-      <div class="list-group-item" ng-repeat="article in articles">
-        <h1>{{article.title}}</h1>
-        <p>{{article.author}} - {{article.epoch}}</p>
-        <p>{{article.summary}}</p>
-        <a class="btn btn-link">Read more</a>@* href="@routes.ArticleController.read/@article.oid" *@
-      </div>
+
+      <div ng-switch-when="list">
+        <div class="list-group" ng-hide="articlesIsEmpty()">
+          <a class="list-group-item" ng-repeat="article in articles" href="#">
+            <h1>{{article.title}}</h1>
+            <p>{{article.author}} - {{article.epoch}}</p>
+            <p>{{article.summary}}</p>
+          </a>
+        </div>      
+      </div>      
     </div>
   </div>
 }
