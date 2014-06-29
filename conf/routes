@@ -4,6 +4,7 @@
 
 # Home page
 GET     /                           @controllers.ApplicationController.index
+GET     /contacts                   @controllers.ApplicationController.contacts
 GET     /api/articles               @controllers.ArticleController.apiList
 GET     /gui/articles               @controllers.ArticleController.guiList
 
