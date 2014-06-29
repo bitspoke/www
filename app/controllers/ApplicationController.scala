@@ -9,4 +9,8 @@ class ApplicationController extends Controller {
     Ok(views.html.index())
   }
 
+  def contacts = Action {
+    Ok(views.html.contacts())
+  }
+
 }
