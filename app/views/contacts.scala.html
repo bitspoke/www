@@ -1,6 +1,27 @@
+@(developers:List[Developer])
+
 @main("Contacts") {
 	<div class="page-header">
-      <h1>Contact <small>our smart developers</small></h1>
+      <h1>Contact <small>our developers</small></h1>
     </div>
-	<h2 class="alert alert-danger" ><span class="fa fa-warning"> Work in progress</span></h2>
+    <div class="row"> 
+    @for(d <- developers) {
+    	<div class="col-sm-6 col-md-4">			
+			<div class="thumbnail">
+				<h3 class="text-center">@d.name</h3>
+				<img src='@routes.Assets.at(s"""${d.photo}""")'></img>
+				<div class="text-center">
+					<div class="btn-group">
+					  <a class="btn btn-default" href="@d.linkedin"><span class="fa fa-linkedin"></span></a>
+					  <a class="btn btn-default" href="mailto:@d.email"><span class="fa fa-envelope"></span></a>
+					  <a class="btn btn-default" href="@d.curriculum"><span class="fa fa-file-word-o"></span></a>
+					</div>
+				</div>
+			</div>
+			<div class="caption">				
+				<p class="text-justify">@d.profile</p>
+			</div>
+		</div>
+    }   				
+	</div>
 }
