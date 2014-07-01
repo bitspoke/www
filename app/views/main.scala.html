@@ -22,18 +22,18 @@
     <body>
         <div id="wrapper">
             <header>
-                <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-                  <div class="container">
-                    <a class="btn btn-link navbar-btn" href="/"><span class="fa fa-home"></span> Home</a>
+                <nav class="navbar navbar-inverse navbar-static-top text-center" role="navigation">
+                  <div class="container">                    
                     <a class="btn btn-link navbar-btn" href="@routes.ArticleController.guiList"><span class="fa fa-file-text"></span> Articles</a>
+                    <a class="btn btn-link navbar-btn" href="@routes.ApplicationController.projects"><span class="fa fa-cubes"></span> Projects</a>
                     <a class="btn btn-link navbar-btn" href="@routes.ApplicationController.contacts"><span class="fa fa-envelope"></span> Contacts</a>
                   </div>
                 </nav>
 
                 <div class="jumbotron">
                     <div class="container">
-                        <h1>Bitspoke</h1>
-                        <h2>Software made by experts</h2>
+                        <h1><a href="@routes.ApplicationController.index"><span class="fa fa-cloud"></span></a> Bitspoke</h1>
+                        <h2>Bespoke software made by experts</h2>
                     </div>
                 </div>
             </header>
