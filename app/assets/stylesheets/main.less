@@ -1,12 +1,18 @@
 
 @font-face {
-    font-family: source-sans-pro;
-    src: url('../fonts/source-sans-pro.otf');
+    font-family: Roboto;
+    src: url('../fonts/Roboto-Light.ttf');
+}
+
+@font-face {
+  font-family: FengardoNeue;
+  src: url('../fonts/FengardoNeue_Black.otf');
+  font-weight: bold;
 }
 
 html,
 body {
-  font-family: source-sans-pro;
+  font-family: Roboto;
   height: 100%;
   /* The html and body elements cannot have any padding or margin. */
 }
@@ -38,16 +44,19 @@ body {
 			color: #c7e7dc;
 
 			h1 {
-				color: white;
-				font-size: 60px;
-				letter-spacing: -2px;
-				line-height: 1;
-				text-shadow: 4px 3px 0px #311D9D, 9px 8px 0px rgba(0, 0, 0, 0.25);
-				margin: 0 0 15px;
+                color: white;
+                font-family: FengardoNeue;
+                font-size: 65px;
+                font-weight: bold;
+                letter-spacing: 5px;
+                line-height: 1;
+                text-shadow: 11px 3px 7px #311d9d, 9px 8px 0px rgba(0, 0, 0, 0.25);
+                margin: 0 0 15px;
 			}
 
 			h2 {
 				font-size: 28px;
+                letter-spacing: -2px;
 			}
 
 			p {		
@@ -68,6 +77,10 @@ body {
   		border-bottom: 1px solid rgb(220, 220, 200);
   		margin-bottom: 25px;
   	}
+
+    .article-preview {
+      min-height: 128px;
+    }
   }
 }
 
