@@ -9,7 +9,7 @@ describe('articleCtrl', function() {
   beforeEach(inject(function($httpBackend, $rootScope, $controller) { 
     backend = $httpBackend;
     backend.expectGET('/assets/articles.json')
-           .respond([{title:'title', author:'author', epoch:431276831, summary:'summary', content:'content'}]);
+           .respond([{title:'title', author:'author', publishedAt:431276831, summary:'summary', content:'content'}]);
 
     scope = $rootScope.$new();
     ctrl = $controller('articleCtrl', {$scope: scope});

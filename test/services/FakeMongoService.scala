@@ -1,7 +1,7 @@
 package services
 
 
-class FakeMongo extends Mongo {
+class FakeMongoService extends MongoService {
   import com.github.fakemongo.Fongo
   import com.mongodb.casbah.MongoDB
 

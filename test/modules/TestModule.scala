@@ -1,9 +1,9 @@
 package modules
 
 import scaldi.Module
-import services.{FakeMongo, Mongo}
+import services.{FakeMongoService, MongoService}
 
 
 class TestModule extends Module {
-  bind[Mongo] to new FakeMongo // RealMongoDatabase
+  bind[MongoService] to new FakeMongoService // RealMongoDatabase
 }

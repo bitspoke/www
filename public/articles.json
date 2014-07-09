@@ -1,5 +1,5 @@
 [
-  {"title": "title", "author": "author", "epoch": 431276831, "summary": "summary"},
-  {"title": "title", "author": "author", "epoch": 431276831, "summary": "summary"},
-  {"title": "title", "author": "author", "epoch": 431276831, "summary": "summary"}
+  {"title": "title", "author": "author", "publishedAt": 431276831, "summary": "summary"},
+  {"title": "title", "author": "author", "publishedAt": 431276831, "summary": "summary"},
+  {"title": "title", "author": "author", "publishedAt": 431276831, "summary": "summary"}
 ]

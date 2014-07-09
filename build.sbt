@@ -18,6 +18,8 @@ libraryDependencies ++= Seq(
   "org.webjars" % "bootstrap" % "3.1.1-1",
   "org.webjars" % "angularjs" % "1.2.17",
   "org.webjars" % "font-awesome" % "4.1.0",
+  "org.webjars" % "marked" % "0.3.2-1",
+  "org.webjars" % "cryptojs" % "3.1.2",
   "com.github.fakemongo" % "fongo" % "1.5.1" % "test"
 )
 
@@ -29,7 +31,7 @@ lazy val testJs = taskKey[Int]("Test Javascripts")
 testJs in Test := {
     "npm run test-single-run" !
 }
-
+/*
 test := Def.taskDyn {
   (testJs in Test).value match {
     case 0 => Def.task {
@@ -38,3 +40,4 @@ test := Def.taskDyn {
     case _ => Def.task()
   }
 }.value
+*/

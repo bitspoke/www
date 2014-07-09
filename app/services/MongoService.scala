@@ -2,20 +2,19 @@ package services
 
 
 
-trait Mongo {
-  import com.mongodb.casbah.MongoDB
-  def db: MongoDB
+trait MongoService {
+  def db: com.mongodb.casbah.MongoDB
 }
 
 
 
-
-class RealMongo extends Mongo {
+class RealMongoService extends MongoService {
   import com.mongodb.casbah.{MongoClientURI, MongoClient}
   import play.api.Play
 
   val uri = MongoClientURI(Play.current.configuration.getString("db.default.uri").getOrElse("mongodb://localhost/bitspoke"))
-  val db = MongoClient(uri).apply(uri.underlying.getDatabase)
+  val client = MongoClient(uri)
+  val db = client(uri.underlying.getDatabase)
 }
 
 

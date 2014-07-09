@@ -3,11 +3,11 @@
 # ~~~~
 
 # Home page
-GET     /                           @controllers.ApplicationController.index
-GET     /contacts                   @controllers.ApplicationController.contacts
-GET     /projects                   @controllers.ApplicationController.projects
-GET     /api/articles               @controllers.ArticleController.apiList
-GET     /gui/articles               @controllers.ArticleController.guiList
+GET        /                    @controllers.ApplicationController.index
+GET        /contacts            @controllers.ApplicationController.contacts
+GET        /projects            @controllers.ApplicationController.projects
+GET        /articles            @controllers.ArticleController.read
+POST       /articles            @controllers.ArticleController.create
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET        /assets/*file        controllers.Assets.at(path="/public", file)
