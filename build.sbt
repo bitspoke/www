@@ -12,7 +12,8 @@ scalacOptions += "-target:jvm-1.7"
 
 libraryDependencies ++= Seq(
   "org.mongodb" % "casbah_2.11" % "2.7.2",
-  "org.scaldi" % "scaldi-play_2.11" % "0.3.3",
+  "com.google.inject" % "guice" % "3.0",
+  "com.tzavellas" % "sse-guice" % "0.7.1",
   "org.webjars" % "html5shiv" % "3.7.0",
   "org.webjars" % "respond" % "1.4.2",
   "org.webjars" % "bootstrap" % "3.1.1-1",

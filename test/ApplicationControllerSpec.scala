@@ -11,7 +11,7 @@ import play.api.test.Helpers._
  * For more information, consult the wiki.
  */
 @RunWith(classOf[JUnitRunner])
-class ApplicationSpec extends Specification {
+class ApplicationControllerSpec extends Specification {
 
   "Application" should {
 
@@ -24,7 +24,7 @@ class ApplicationSpec extends Specification {
 
       status(home) must equalTo(OK)
       contentType(home) must beSome.which(_ == "text/html")
-      contentAsString(home) must contain ("Software made by experts")
+      contentAsString(home) must contain("Bitspoke") and contain("Bespoke software made by experts")
     }
   }
 }

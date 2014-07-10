@@ -1,12 +1,8 @@
 package services
 
-
 class FakeMongoService extends MongoService {
-  import com.github.fakemongo.Fongo
-  import com.mongodb.casbah.MongoDB
-
-  // see https://github.com/fakemongo/fongo
-  val db = new MongoDB (
-    new Fongo("mongo server 1").getDB("bitspoke")
+  val db = new com.mongodb.casbah.MongoDB (
+    // see https://github.com/fakemongo/fongo
+    new com.github.fakemongo.Fongo("fongo").getDB("bitspoke")
   )
 }
