@@ -1,6 +1,8 @@
-package controllers
+package utils
 
 import com.mongodb.casbah.Imports._
+import com.mongodb.casbah.commons.{Logging => AnyDBObject}
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
@@ -8,9 +10,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
  *
  *    ``import com.mongodb.casbah.Imports._``
  *
- * in your controller!
+ * in your controllers!
  */
-trait MongoSupport {
+trait MongoUtils {
 
   def parse_dbObject = play.api.mvc.BodyParsers.parse.json.map { jsValue =>
     new MongoDBObject(
@@ -18,7 +20,7 @@ trait MongoSupport {
     )
   }
 
-  def serialize(dbObj:MongoCollection) = {
+  def serialize(dbObj: AnyDBObject) = {
     com.mongodb.util.JSON.serialize(dbObj)
   }
 

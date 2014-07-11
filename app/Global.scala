@@ -1,13 +1,13 @@
 import com.google.inject.Guice
 import com.tzavellas.sse.guice.ScalaModule
 import play.api.GlobalSettings
-import services.{MongoService, RealMongoService}
+import services.{Database, RealDatabase}
 
 object Global extends GlobalSettings {
 
   val injector = Guice.createInjector(new ScalaModule {
     def configure(): Unit = {
-      bind[MongoService].to[RealMongoService]
+      bind[Database].to[RealDatabase]
     }
   })
 

@@ -6,8 +6,9 @@
 GET        /                    @controllers.ApplicationController.index
 GET        /contacts            @controllers.ApplicationController.contacts
 GET        /projects            @controllers.ApplicationController.projects
-GET        /articles            @controllers.ArticleController.list
 POST       /articles            @controllers.ArticleController.create
+GET        /articles/:id        @controllers.ArticleController.read(id)
+GET        /articles            @controllers.ArticleController.list
 
 # Map static resources from the /public folder to the /assets URL path
 GET        /assets/*file        controllers.Assets.at(path="/public", file)

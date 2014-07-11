@@ -1,14 +1,15 @@
 package controllers
 
-import com.google.inject.{Inject, Singleton}
 import com.mongodb.casbah.Imports._
+import com.google.inject.{Inject, Singleton}
 import play.api.mvc.{Action, Controller}
-import services.MongoService
+import services.Database
+import utils.MongoUtils
 
 @Singleton()
-class ArticleController @Inject()(mongo: MongoService) extends Controller with MongoSupport {
+class ArticleController @Inject()(db: Database) extends Controller with MongoUtils {
 
-  val articles = mongo.db("articles") // mongo db collection
+  val articles = db.collection("articles")
 
 
   def create = Action(parse_dbObject) { request =>
@@ -18,6 +19,17 @@ class ArticleController @Inject()(mongo: MongoService) extends Controller with M
         // TODO += ("author" -> request.user)
     )
     Ok
+  }
+
+
+  def read(id: String) = Action { implicit request =>
+    render {
+      case Accepts.Json() => {
+        articles.findOneByID(new ObjectId(id)).map { article =>
+          Ok(serialize(article)).as(JSON)
+        }.getOrElse(NotFound)
+      }
+    }
   }
 
 

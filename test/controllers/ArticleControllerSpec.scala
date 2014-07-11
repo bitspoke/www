@@ -1,80 +1,142 @@
 package controllers
 
-import com.mongodb.casbah.commons.MongoDBObject
+
+import com.mongodb.casbah.commons.Imports._
 import org.specs2.execute.{AsResult, Result}
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mutable._
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.MimeTypes.JSON
-import play.api.libs.json.Json
+import play.api.libs.json.{JsArray, Json}
 import play.api.test.Helpers._
 import play.api.test._
-import services.FakeMongoService
+import services.FakeDatabase
+import utils.TestUtils
 
-class ArticleControllerSpec extends Specification with JsonMatchers {
-
-  val iso8601 = "^([\\+-]?\\d{4}(?!\\d{2}\\b))((-?)((0[1-9]|1[0-2])(\\3([12]\\d|0[1-9]|3[01]))?|W([0-4]\\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\\d|[12]\\d{2}|3([0-5]\\d|6[1-6])))([T\\s]((([01]\\d|2[0-3])((:?)[0-5]\\d)?|24\\:?00)([\\.,]\\d+(?!:))?)?(\\17[0-5]\\d([\\.,]\\d+)?)?([zZ]|([\\+-])([01]\\d|2[0-3]):?([0-5]\\d)?)?)?)?$".r
-
-  val fakeMongo = new FakeMongoService
-
-  val fakeArticles = fakeMongo.db("articles")
-
-  val fakeApp = FakeApplication(withGlobal = Some(new play.api.GlobalSettings() {
-    override def getControllerInstance[A](controllerClass: Class[A]) = {
-      new ArticleController(fakeMongo).asInstanceOf[A]
-    }
-  }))
-
-  abstract class WithFakeData(app: FakeApplication) extends WithApplication(app) {
-    override def around[T: AsResult](t: => T): Result = {
-      fakeArticles.drop()
-      fakeArticles += MongoDBObject(
-        "title" -> "my test title"
-      )
-      super.around(t)
-    }
-  }
-
-
+class ArticleControllerSpec extends Specification with JsonMatchers with TestUtils {
 
   "ArticleController" should {
 
-    "list all articles" in new WithFakeData(fakeApp) {
+    "list all articles" in withApplication {
       val result = route(
         FakeRequest(GET, "/articles")
           .withHeaders(ACCEPT -> JSON)
       ).get
 
-      status(result) must equalTo(OK)
-      contentType(result) must beSome.which(_ == JSON)
-      contentAsString(result) must */("title" -> "my test title") and */("date" -> iso8601)
+      status(result) must beEqualTo(OK)
+      contentType(result) must beSome(JSON)
+      val jsonVal = contentAsJson(result)
+      jsonVal must haveClass[JsArray]
+      jsonVal.asInstanceOf[JsArray].value must haveSize(2)
+      val jsonStr = contentAsString(result)
+      jsonStr must /#(0) /("_id") /("$oid" -> "53bf100e3004eb66c3f7e5fe")
+      jsonStr must /#(0) /("title" -> "Christmas Programming")
+      jsonStr must /#(0) /("author" -> "paolo")
+      jsonStr must /#(0) /("date") /("$date" -> "2012-12-25T23:40:56.123Z")
+      jsonStr must /#(1) /("_id") /("$oid" -> "53bc77c63004d90c724e91d1")
+      jsonStr must /#(1) /("title" -> "Beauty of Life")
+      jsonStr must /#(1) /("author" -> "nicholas")
+      jsonStr must /#(1) /("date") /("$date" -> "2012-02-09T09:36:33.987Z")
+      // TODO jsonStr must /#(1) /("content" -> "???")
     }
 
 
-    "create a new article" in new WithFakeData(fakeApp) {
+
+    "create a new article" in withApplication {
       val result = route(
         FakeRequest(POST, "/articles")
           .withJsonBody(Json.obj(
-            "title" -> "new article",
-            "author" -> "paolo"))
+            "title" -> "New Article",
+            "author" -> "giuseppe"
+            // TODO "content" -> "???"
+        ))
       ).get
 
-      status(result) must equalTo(OK)
+      status(result) must beEqualTo(OK)
       contentType(result) must beNone
       contentAsString(result) must beEmpty
-      fakeArticles must have size(2)
+      fakeDbArticles must have size(3)
+
+      val article = fakeDbArticles.findOne(Map("title" -> "New Article"))
+      article must beSome
+      val jsonStr = article.get.toString
+      jsonStr must /("title" -> "New Article")
+      jsonStr must /("author" -> "giuseppe")
+      jsonStr must /("date") /("$date" -> iso8601)
+      // TODO jsonStr must /("content" -> "???")
     }
 
 
-    "read an article by id" in new WithFakeData(fakeApp) {
-      val result = route(
-        FakeRequest(GET, "/articles/4d190356b9d8ba42efa80898")
-          .withHeaders(ACCEPT -> JSON)
-      ).get
+    "read an article by id" in {
 
-      status(result) must equalTo(OK)
-      contentType(result) must beSome.which(_ == JSON)
-      contentAsString(result) must */("my test title")
+      "resulting Ok when it exists" in withApplication {
+        val result = route(
+          FakeRequest(GET, "/articles/53bc77c63004d90c724e91d1")
+            .withHeaders(ACCEPT -> JSON)
+        ).get
+
+        status(result) must beEqualTo(OK)
+        contentType(result) must beSome(JSON)
+        val jsonStr = contentAsString(result)
+        jsonStr must /("_id") /("$oid" -> "53bc77c63004d90c724e91d1")
+        jsonStr must /("title" -> "Beauty of Life")
+        jsonStr must /("author" -> "nicholas")
+        jsonStr must /("date") /("$date" -> "2012-02-09T09:36:33.987Z")
+        // TODO json must /("content" -> "???")
+      }
+
+      "resulting NotFound when it doesn't" in withApplication {
+        val result = route(
+          FakeRequest(GET, "/articles/507c7f79bcf86cd7994f6c0e")
+            .withHeaders(ACCEPT -> JSON)
+        ).get
+
+        status(result) must beEqualTo(NOT_FOUND)
+        contentType(result) must beNone
+        contentAsString(result) must beEmpty
+      }
+    }
+
+    "update an article" in withApplication {
+      todo
+    }
+
+    "delete an article" in withApplication {
+      todo
     }
   }
+
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  val fakeDb = new FakeDatabase
+
+  val fakeDbArticles = fakeDb.collection("articles")
+
+  val fakeApp = FakeApplication(withGlobal = Some(new play.api.GlobalSettings() {
+    override def getControllerInstance[A](controllerClass: Class[A]) = {
+      new ArticleController(fakeDb).asInstanceOf[A]
+    }
+  }))
+
+  val withApplication = new WithApplication(fakeApp) {
+    override def around[T: AsResult](t: => T): Result = {
+      fakeDbArticles += Map(
+        "_id" -> objectId("53bf100e3004eb66c3f7e5fe"),
+        "title" -> "Christmas Programming",
+        "author" -> "paolo",
+        "date" -> date("2012-12-25T23:40:56.123Z")
+        // TODO "content" -> "???"
+      )
+      fakeDbArticles += Map(
+        "_id" -> objectId("53bc77c63004d90c724e91d1"),
+        "title" -> "Beauty of Life",
+        "author" -> "nicholas",
+        "date" -> date("2012-02-09T09:36:33.987Z")
+        // TODO "content" -> "???"
+      )
+      super.around(t)
+    }
+  }
+
 }

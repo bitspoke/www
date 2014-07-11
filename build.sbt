@@ -11,7 +11,7 @@ scalaVersion := "2.11.1"
 scalacOptions += "-target:jvm-1.7"
 
 libraryDependencies ++= Seq(
-  "org.mongodb" % "casbah_2.11" % "2.7.2",
+  "org.mongodb" % "casbah-core_2.11" % "2.7.2",
   "com.google.inject" % "guice" % "3.0",
   "com.tzavellas" % "sse-guice" % "0.7.1",
   "org.webjars" % "html5shiv" % "3.7.0",
