@@ -1,15 +1,27 @@
 'use strict';
 
+// https://docs.angularjs.org/api/ngMock/service/$httpBackend
+
 describe('articleCtrl', function() {
+
   var scope, ctrl, backend;
 
-  // module() is used to load Angular modules that you want to test
-  beforeEach(module('bitspokeApp'));
+
+  beforeEach(module('app'));
+
 
   beforeEach(inject(function($httpBackend, $rootScope, $controller) { 
     backend = $httpBackend;
-    backend.expectGET('/assets/articles.json')
-           .respond([{title:'title', author:'author', publishedAt:431276831, summary:'summary', content:'content'}]);
+    backend.expectGET('/articles').respond([
+      {
+        _id: {'$oid': '53bf100e3004eb66c3f7e5fe'},
+        title:' Christmas Programming',
+        author: 'paolo',
+        _date: {'$date': '2014-07-11T20:16:06.977Z'},
+        summary: 'HIUwbiBOAEA2CWBrE0AuB7aB3S9Uo0wFsBXAYwAtoz0ATEIA',
+        content: 'HIUwbiBOAEA2CWBrEBnaAXA9tA7pe6IGm2AtgK4DGAFtJZgCYhAAAA=='
+      }
+    ]);
 
     scope = $rootScope.$new();
     ctrl = $controller('articleCtrl', {$scope: scope});
@@ -18,32 +30,23 @@ describe('articleCtrl', function() {
 
   // inject() is used to inject arguments of all given functions
 
-  it('should have no articles on init', inject(function($controller) {    
-    expect(scope.articlesIsEmpty()).toBe(true);    
-  }));
+  it('should have "listing" state on init', function() {
+    expect(scope.state).toBe('listing');
+  });
 
 
-  it('should have "list" state on init', inject(function($controller) {    
-    expect(scope.state).toBe('list');
-  }));
-
-
-  it('should switch state and class', inject(function($controller) {    
-    expect(scope.getClassByState('list')).toBe('active');    
-    scope.setState('add');
-    expect(scope.getClassByState('add')).toBe('active');
-  }));
-
-
-  it('should get articles from backend', inject(function($controller) {  
+  it('should get articles from backend', function() { 
     backend.flush();  
-    expect(scope.articlesIsEmpty()).toBe(false);
     expect(scope.articles.length).toBe(1);
-  }));
+  });
 
 
-  it('should save an article', inject(function($controller) {
-    scope.save({title:'a new article'});
+  it('should create an article', function() {
+    scope.create({
+      'title': 'title',
+      'summary': 'summary',
+      'content': 'content'
+    });
     expect(scope.articles.length).toBe(1);
-  }));
+  });
 });

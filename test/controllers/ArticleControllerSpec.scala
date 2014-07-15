@@ -43,27 +43,35 @@ class ArticleControllerSpec extends Specification with JsonMatchers with TestUti
 
 
     "create a new article" in withApplication {
+
+      val author = "giuseppe"
+      val title = "Smart developers"
+      val summary = "HIUwbiBOAEA2CWBrE0AuB7aB3S9Uo0wFsBXAYwAtoz0ATEIA"
+      val content = "HIUwbiBOAEA2CWBrEBnaAXA9tA7pe6IGm2AtgK4DGAFtJZgCYhAAAA=="
+      
       val result = route(
         FakeRequest(POST, "/articles")
           .withJsonBody(Json.obj(
-            "title" -> "New Article",
-            "author" -> "giuseppe"
-            // TODO "content" -> "???"
+            "author" -> author,
+            "title" -> title,
+            "summary" -> summary,
+            "content" -> content
         ))
       ).get
 
       status(result) must beEqualTo(OK)
-      contentType(result) must beNone
-      contentAsString(result) must beEmpty
+      contentType(result) must beSome(JSON)
+      contentAsString(result) must /("_id" -> sha1)
       fakeDbArticles must have size(3)
 
-      val article = fakeDbArticles.findOne(Map("title" -> "New Article"))
+      val article = fakeDbArticles.findOne(Map("title" -> title))
       article must beSome
       val jsonStr = article.get.toString
-      jsonStr must /("title" -> "New Article")
-      jsonStr must /("author" -> "giuseppe")
+      jsonStr must /("author" -> author)
+      jsonStr must /("title" -> title)
       jsonStr must /("date") /("$date" -> iso8601)
-      // TODO jsonStr must /("content" -> "???")
+      jsonStr must /("summary" -> summary)
+      jsonStr must /("content" -> content)
     }
 
 
@@ -139,4 +147,5 @@ class ArticleControllerSpec extends Specification with JsonMatchers with TestUti
     }
   }
 
+  // TODO use specs2 fixtures
 }

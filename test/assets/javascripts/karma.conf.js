@@ -15,8 +15,9 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      "target/web/web-modules/main/webjars/lib/angularjs/angular.js",  
-      // "target/web/web-modules/main/webjars/lib/angularjs/angular-route.js",
+      "target/web/web-modules/main/webjars/lib/angularjs/angular.min.js",
+      "target/web/web-modules/main/webjars/lib/angular-ui-bootstrap/ui-bootstrap-tpls.min.js",
+      // "target/web/web-modules/main/webjars/lib/angularjs/angular-route.min.js",
       "target/web/web-modules/main/webjars/lib/angularjs/angular-mocks.js",
       "public/javascripts/*.js",
       "test/assets/javascripts/unit/*.js"

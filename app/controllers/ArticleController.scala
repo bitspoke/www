@@ -1,10 +1,11 @@
 package controllers
 
-import com.mongodb.casbah.Imports._
 import com.google.inject.{Inject, Singleton}
+import com.mongodb.casbah.Imports._
 import play.api.mvc.{Action, Controller}
 import services.Database
 import utils.MongoUtils
+
 
 @Singleton()
 class ArticleController @Inject()(db: Database) extends Controller with MongoUtils {
@@ -13,12 +14,12 @@ class ArticleController @Inject()(db: Database) extends Controller with MongoUti
 
 
   def create = Action(parse_dbObject) { request =>
-    articles += (
-      request.body
-        += ("date" -> new java.util.Date)
-        // TODO += ("author" -> request.user)
-    )
-    Ok
+    val article = request.body
+    article += ("date" -> new java.util.Date)
+    // TODO += ("author" -> request.user)
+    articles += article
+
+    Ok(s"""{"_id": "${article("_id")}"}""").as(JSON)
   }
 
 
@@ -36,7 +37,7 @@ class ArticleController @Inject()(db: Database) extends Controller with MongoUti
   def list = Action { implicit request =>
     render {
       case Accepts.Html() => Ok(views.html.articles())
-      case Accepts.Json() => Ok(serialize(articles)).as(JSON)
+      case Accepts.Json() => Ok(serialize(articles)).as(JSON) // TODO do not return contents
     }
   }
 
