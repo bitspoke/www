@@ -26,24 +26,42 @@ angular.module('app')
   };
 
 
-  $scope.create = function(article) {
-    var data = angular.copy(article);
-    if (angular.isDefined(article.summary)) data.summary = lzstringSrv.compress(article.summary);
-    if (angular.isDefined(article.content)) data.content = lzstringSrv.compress(article.content);
-
-    $http.post('/articles', data)
-      .success(function() {
-        $scope.list();
-      })
-      .error(function(data) {
-        $scope.alerts.push({type: 'danger', msg: data});
-      });
+  $scope.creating = function() {
+    $scope.state = 'creating';
+    $scope.article = {};
   };
 
 
-  $scope.read = function(id) {
+  $scope.save = function(article) {
+    var data = angular.copy(article);
+
+    if (angular.isDefined(article.summary))
+      data.summary = lzstringSrv.compress(article.summary);
+
+    if (angular.isDefined(article.content))
+      data.content = lzstringSrv.compress(article.content);
+
+    if (angular.isDefined(article.marked))
+      delete article.marked;
+
+    if ($scope.state === 'creating') {
+      $http.post('/articles', data)
+        .success(function() {
+          $scope.list();
+        })
+        .error(function(data) {
+          $scope.alerts.push({type: 'danger', msg: data});
+        });
+    }
+    else if ($scope.state === 'updating') {
+      // TODO $http.put()
+    }
+  };
+
+
+  $scope.read = function(article) {
     $scope.state = 'reading';
-    $http.get('/articles/' + id)
+    $http.get('/articles/' + article['_id']['$oid'])
       .success(function(data) {
         data.content = lzstringSrv.decompress(data.content);
         data.summary = lzstringSrv.decompress(data.summary);
@@ -54,6 +72,19 @@ angular.module('app')
       });
   };
 
+
+
+  $scope.updating = function() {
+    $scope.state = 'updating';
+  };
+
+
+  $scope.markdown = function(article) {
+    if (angular.isDefined(article.content))
+      article.marked = marked(article.content);
+    else
+      delete article.marked;
+  };
 
 
   $scope.marked = function(src) {

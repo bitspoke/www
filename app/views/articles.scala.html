@@ -2,73 +2,73 @@
     <div ng-app="app" ng-controller="articleCtrl">
         <div class="page-header">
             <div class="btn-group pull-right">
-                <button title="List all articles" type="button" class="btn btn-default" ng-class="{'active':state==='listing'}" ng-click="list()"><span class="fa fa-list"></span> List</button>
-                <button title="Create new article" type="button" class="btn btn-default" ng-class="{'active':state==='creating'}" ng-click="state='creating'"><span class="fa fa-file-o"></span> Create</button>
+                <button title="Create new article" type="button" class="btn btn-default" ng-class="{'active':state==='creating'}" ng-click="creating()"><i class="fa fa-file-o"></i> Create</button>
+                <button title="Read current article" type="button" class="btn btn-default" ng-class="{'active':state==='reading'}" ng-disabled="state!=='updating'" ng-click="read(article)"><i class="fa fa-refresh"></i> Read</button>
+                <button title="Update current article" type="button" class="btn btn-default" ng-class="{'active':state==='updating'}" ng-disabled="state!=='reading'" ng-click="updating()"><i class="fa fa-upload"></i> Update</button>
+                <button title="List all articles" type="button" class="btn btn-default" ng-class="{'active':state==='listing'}" ng-click="list()"><i class="fa fa-list"></i> List</button>
             </div>
             <h1>Articles <small>written by our authors</small></h1>
             <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
         </div>
 
 
-        <div ng-switch on="state">
-            <div ng-switch-when="listing">
-                <div class="list-group">
-                    <a class="list-group-item" ng-repeat="article in articles" ng-click="read(article['_id']['$oid'])" href="">
-                        <h2>{{article.title}}</h2>
-                        <p>{{article.author}} - {{article.date["$date"] | date:"medium"}}</p>
-                        <blockquote>{{article.summary}}</blockquote>
-                    </a>
-                </div>
-            </div>
 
-            <div ng-switch-when="reading">
-                <h1>{{article.title}}</h1>
-                <p>Author: {{article.author}}</p>
-                <p>Published: {{article.date["$date"] | date:"medium"}}</p>
-                <blockquote>{{article.summary}}</blockquote>
-                <div ng-bind-html="marked(article.content) | trust"></div>
-            </div>
-
-            <div ng-switch-when="creating">
-                <form name="articleForm" novalidate role="form">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="title">Title</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="title" placeholder="Enter title" ng-model="newArticle.title" required>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-primary" type="button" ng-disabled="articleForm.$invalid" ng-click="create(newArticle)">
-                                            <span class="fa fa-save"></span> Save
-                                        </button>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="summary">Summary</label>
-                                <textarea class="form-control" style="resize:none" name="summary" rows="4" ng-model="newArticle.summary"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="content">Content</label>
-                                <textarea class="form-control" style="resize:none" name="content" rows="32" ng-model="newArticle.content"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="content">Preview</label>
-                                <div class="article-preview well">
-                                    <h1>{{newArticle.title}}</h1>
-                                    <blockquote>{{newArticle.summary}}</blockquote>
-                                    <div ng-bind-html="marked(newArticle.content) | trust">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+        <div ng-if="state==='listing'">
+            <div class="list-group">
+                <a class="list-group-item" ng-repeat="article in articles" ng-click="read(article)" href="">
+                    <h2>{{article.title}}</h2>
+                    <p>{{article.author}} - {{article.date["$date"] | date:"medium"}}</p>
+                    <blockquote>{{article.summary}}</blockquote>
+                </a>
             </div>
         </div>
+
+        <div ng-if="state==='reading'">
+            <h1>{{article.title}}</h1>
+            <p>Author: {{article.author}}</p>
+            <p>Published: {{article.date["$date"] | date:"medium"}}</p>
+            <blockquote>{{article.summary}}</blockquote>
+            <div ng-bind-html="marked(article.content) | trust"></div>
+        </div>
+
+        <div ng-if="state==='creating' || state==='updating'">
+            <form name="form" novalidate role="form">
+                <div class="pull-right">
+                    <button title="Save changes" type="button" class="btn btn-primary" ng-disabled="form.$invalid" ng-click="save(article)"><span class="fa fa-save"></span> Save</button>
+                </div>
+                <tabset>
+                    <tab>
+                        <tab-heading>
+                            <i class="fa fa-edit"></i> Editor
+                        </tab-heading>
+                        <div class="form-group">
+                            <label for="title"><strong>Title</strong></label>
+                            <input type="text" class="form-control" name="title" placeholder="Enter title" ng-model="article.title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="summary"><strong>Summary</strong></label>
+                            <textarea class="form-control" style="resize:none" name="summary" rows="4" ng-model="article.summary"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="content"><strong>Content</strong></label>
+                            <textarea class="form-control" style="resize:none" name="content" rows="32" ng-model="article.content"></textarea>
+                        </div>
+                    </tab>
+                    <tab select="markdown(article)" disabled="!(article.title || article.summary || article.content)">
+                        <tab-heading>
+                            <i class="fa fa-eye"></i> Preview
+                        </tab-heading>
+                        <div class="form-group">
+                            <h1 ng-if="article.title">{{article.title}}</h1>
+                            <blockquote ng-if="article.summary">{{article.summary}}</blockquote>
+                            <div ng-if="article.content" ng-bind-html="article.marked | trust"></div>
+                        </div>
+                    </tab>
+                </tabset>
+            </form>
+        </div>
     </div>
+
 
     @* TODO lz-string should resolved as WebJar *@
     <script src="@routes.Assets.at("javascripts/lz-string-1.3.3-min.js")"></script>
