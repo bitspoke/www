@@ -21,6 +21,7 @@ libraryDependencies ++= Seq(
   "org.webjars" % "angular-ui-bootstrap" % "0.11.0-2",
   "org.webjars" % "font-awesome" % "4.1.0",
   "org.webjars" % "marked" % "0.3.2-1",
+  "org.webjars" % "lz-string" % "1.3.3",
   "com.github.fakemongo" % "fongo" % "1.5.1" % "test"
 )
 

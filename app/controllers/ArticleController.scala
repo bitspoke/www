@@ -18,8 +18,8 @@ class ArticleController @Inject()(db: Database) extends Controller with MongoUti
     article += ("date" -> new java.util.Date)
     // TODO += ("author" -> request.user)
     articles += article
-
-    Ok(s"""{"_id": "${article("_id")}"}""").as(JSON)
+    //TODO Ok(s"""{"_id": "${article("_id")}"}""").as(JSON)
+    Ok
   }
 
 
@@ -34,16 +34,25 @@ class ArticleController @Inject()(db: Database) extends Controller with MongoUti
   }
 
 
-  def list = Action { implicit request =>
-    render {
-      case Accepts.Html() => Ok(views.html.articles())
-      case Accepts.Json() => Ok(serialize(articles)).as(JSON) // TODO do not return contents
-    }
+  def update(id: String) = Action(parse_dbObject) { request =>
+    val article = request.body
+    article += ("date" -> new java.util.Date)
+    // TODO += ("author" -> request.user)
+    articles.findAndModify(Map("_id" -> new ObjectId(id)), article)
+    Ok
   }
 
 
   def delete(id: String) = Action {
     articles.findAndRemove(Map("_id" -> new ObjectId(id)))
     Ok
+  }
+
+
+  def list = Action { implicit request =>
+    render {
+      case Accepts.Html() => Ok(views.html.articles())
+      case Accepts.Json() => Ok(serialize(articles)).as(JSON) // TODO do not return contents
+    }
   }
 }

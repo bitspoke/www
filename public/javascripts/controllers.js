@@ -43,14 +43,14 @@ angular.module('app')
   $scope.save = function(article) {
     var data = angular.copy(article);
 
-    if (angular.isDefined(article.summary))
-      data.summary = lzstringSrv.compress(article.summary);
+    if (angular.isDefined(data.summary))
+      data.summary = lzstringSrv.compress(data.summary);
 
-    if (angular.isDefined(article.content))
-      data.content = lzstringSrv.compress(article.content);
+    if (angular.isDefined(data.content))
+      data.content = lzstringSrv.compress(data.content);
 
-    if (angular.isDefined(article.marked))
-      delete article.marked;
+    if (angular.isDefined(data.marked))
+      delete data.marked;
 
     if ($scope.state === 'creating') {
       $http.post('/articles', data)
@@ -60,7 +60,9 @@ angular.module('app')
         .error(handleError);
     }
     else if ($scope.state === 'updating') {
-      $http.put('/articles/' + id(article))
+      var oid = data['_id']['$oid'];
+      delete data['_id'];
+      $http.put('/articles/' + oid, data)
         .success(function() {
           $scope.list();
         })

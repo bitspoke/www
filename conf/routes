@@ -8,6 +8,7 @@ GET        /contacts            @controllers.ApplicationController.contacts
 GET        /projects            @controllers.ApplicationController.projects
 POST       /articles            @controllers.ArticleController.create
 GET        /articles/:id        @controllers.ArticleController.read(id)
+PUT        /articles/:id        @controllers.ArticleController.update(id)
 DELETE     /articles/:id        @controllers.ArticleController.delete(id)
 GET        /articles            @controllers.ArticleController.list
 

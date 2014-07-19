@@ -1,0 +1,14 @@
+<div class="list-group">
+    <a class="list-group-item" ng-repeat="article in articles">
+        <div class="btn-group pull-right">
+            <button title="Read" class="btn btn-default" ng-click="read(article)" ng-class="{'active':state==='reading'}"><i class="fa fa-file-text-o"></i></button>
+            <button title="Edit" class="btn btn-default" ng-click="updating(article)" ng-class="{'active':state==='updating'}"><i class="fa fa-pencil"></i></button>
+            <button title="Delete" class="btn btn-danger" ng-click="delete(article)" ><i class="fa fa-times"></i></button>
+        </div>
+        <h2>{{article.title}}</h2>
+        <blockquote>
+            <p>{{article.summary}}</p>
+            <footer>{{article.author || 'user'}}, {{(article.date["$date"] | date:"medium") || 'today'}}</footer>
+        </blockquote>
+    </a>
+</div>

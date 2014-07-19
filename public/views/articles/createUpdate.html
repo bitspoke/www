@@ -1,0 +1,36 @@
+<form name="form" novalidate role="form">
+    <div class="button-group pull-right">
+        <button title="Back" class="btn btn-default" ng-click="list()"><span class="fa fa-arrow-left"></span></button>
+        <button title="Save" class="btn btn-primary" ng-disabled="form.$invalid" ng-click="save(article)"><span class="fa fa-save"></span></button>
+    </div>
+    <tabset>
+        <tab>
+            <tab-heading>
+                <i class="fa fa-edit"></i> Editor
+            </tab-heading>
+            <div class="form-group">
+                <label for="title"><strong>Title</strong></label>
+                <input type="text" class="form-control" name="title" placeholder="Enter title" ng-model="article.title" required>
+            </div>
+            <div class="form-group">
+                <label for="summary"><strong>Summary</strong></label>
+                <textarea class="form-control" style="resize:none" name="summary" rows="4" ng-model="article.summary"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="content"><strong>Content</strong></label>
+                <textarea class="form-control" style="resize:none" name="content" rows="32" ng-model="article.content"></textarea>
+            </div>
+        </tab>
+        <tab select="markdown(article)" disabled="!article.title">
+            <tab-heading>
+                <i class="fa fa-eye"></i> Preview
+            </tab-heading>
+            <h2>{{article.title}}</h2>
+            <blockquote>
+                <p>{{article.summary}}</p>
+                <footer>{{article.author || 'user'}}, {{(article.date["$date"] | date:"medium") || 'today'}}</footer>
+            </blockquote>
+            <div ng-bind-html="marked(article.content) | trust"></div>
+        </tab>
+    </tabset>
+</form>
