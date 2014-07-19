@@ -4,10 +4,20 @@ angular.module('app')
 
 .controller('articleCtrl', ['$scope', '$http', 'lzstringSrv', function ($scope, $http, lzstringSrv) {
 
+
   $scope.alerts = [];
+
+  var handleError = function(data) {
+    $scope.alerts.push({type: 'danger', msg: data});
+  };
 
   $scope.closeAlert = function(index) {
     $scope.alerts.splice(index, 1);
+  };
+
+
+  var id = function(article) {
+    return article['_id']['$oid'];
   };
 
 
@@ -15,14 +25,12 @@ angular.module('app')
     $scope.state = 'listing';
     $http.get('/articles')
       .success(function(data) {
-        angular.forEach(data, function(value) {
-          value.summary = lzstringSrv.decompress(value.summary);
+        angular.forEach(data, function(item) {
+          item.summary = lzstringSrv.decompress(item.summary);
         });
         $scope.articles = data;
       })
-      .error(function(data) {
-        $scope.alerts.push({type: 'danger', msg: data});
-      });
+      .error(handleError);
   };
 
 
@@ -49,33 +57,44 @@ angular.module('app')
         .success(function() {
           $scope.list();
         })
-        .error(function(data) {
-          $scope.alerts.push({type: 'danger', msg: data});
-        });
+        .error(handleError);
     }
     else if ($scope.state === 'updating') {
-      // TODO $http.put()
+      $http.put('/articles/' + id(article))
+        .success(function() {
+          $scope.list();
+        })
+        .error(handleError);
     }
   };
 
 
   $scope.read = function(article) {
     $scope.state = 'reading';
-    $http.get('/articles/' + article['_id']['$oid'])
+    $http.get('/articles/' + id(article))
       .success(function(data) {
         data.content = lzstringSrv.decompress(data.content);
         data.summary = lzstringSrv.decompress(data.summary);
         $scope.article = data;
       })
-      .error(function(data) {
-        $scope.alerts.push({type: 'danger', msg: data});
-      });
+      .error(handleError);
   };
 
 
 
-  $scope.updating = function() {
+  $scope.updating = function(article) {
+    $scope.read(article);
     $scope.state = 'updating';
+  };
+
+
+
+  $scope.delete = function(article) {
+    $http.delete('/articles/'+ id(article))
+      .success(function() {
+        $scope.list();
+      })
+      .error(handleError);
   };
 
 
@@ -94,7 +113,7 @@ angular.module('app')
   };
 
 
-  // finally invoke list() to switch to 'listing' state
+  // start in 'listing' state
   $scope.list();
 
 }])

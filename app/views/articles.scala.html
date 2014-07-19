@@ -2,12 +2,10 @@
     <div ng-app="app" ng-controller="articleCtrl">
         <div class="page-header">
             <div class="btn-group pull-right">
-                <button title="Create new article" type="button" class="btn btn-default" ng-class="{'active':state==='creating'}" ng-click="creating()"><i class="fa fa-file-o"></i> Create</button>
-                <button title="Read current article" type="button" class="btn btn-default" ng-class="{'active':state==='reading'}" ng-disabled="state!=='updating'" ng-click="read(article)"><i class="fa fa-refresh"></i> Read</button>
-                <button title="Update current article" type="button" class="btn btn-default" ng-class="{'active':state==='updating'}" ng-disabled="state!=='reading'" ng-click="updating()"><i class="fa fa-upload"></i> Update</button>
-                <button title="List all articles" type="button" class="btn btn-default" ng-class="{'active':state==='listing'}" ng-click="list()"><i class="fa fa-list"></i> List</button>
+                <button class="btn btn-default" ng-class="{'active':state==='creating'}" ng-click="creating()"><i class="fa fa-file-o"></i></button>
+                <button class="btn btn-default" ng-class="{'active':state==='listing'}" ng-click="list()"><i class="fa fa-list"></i></button>
             </div>
-            <h1>Articles <small>written by our authors</small></h1>
+            <h1>Articles <br><small>{{state}}</small></h1>
             <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
         </div>
 
@@ -15,26 +13,26 @@
 
         <div ng-if="state==='listing'">
             <div class="list-group">
-                <a class="list-group-item" ng-repeat="article in articles" ng-click="read(article)" href="">
-                    <h2>{{article.title}}</h2>
-                    <p>{{article.author}} - {{article.date["$date"] | date:"medium"}}</p>
-                    <blockquote>{{article.summary}}</blockquote>
+                <a class="list-group-item" ng-repeat="article in articles">
+                    <ng-include src="'@routes.Assets.at("/views/articles/rud.html")'"></ng-include>
+                    <ng-include src="'@routes.Assets.at("/views/articles/summary.html")'"></ng-include>
                 </a>
             </div>
         </div>
 
+
         <div ng-if="state==='reading'">
-            <h1>{{article.title}}</h1>
-            <p>Author: {{article.author}}</p>
-            <p>Published: {{article.date["$date"] | date:"medium"}}</p>
-            <blockquote>{{article.summary}}</blockquote>
+            <ng-include src="'@routes.Assets.at("/views/articles/rud.html")'"></ng-include>
+            <ng-include src="'@routes.Assets.at("/views/articles/summary.html")'"></ng-include>
             <div ng-bind-html="marked(article.content) | trust"></div>
         </div>
 
+
         <div ng-if="state==='creating' || state==='updating'">
             <form name="form" novalidate role="form">
-                <div class="pull-right">
-                    <button title="Save changes" type="button" class="btn btn-primary" ng-disabled="form.$invalid" ng-click="save(article)"><span class="fa fa-save"></span> Save</button>
+                <div class="button-group pull-right">
+                    <button class="btn btn-default  " ng-click="list()"><span class="fa fa-times"></span></button>
+                    <button class="btn btn-primary" ng-disabled="form.$invalid" ng-click="save(article)"><span class="fa fa-save"></span></button>
                 </div>
                 <tabset>
                     <tab>
@@ -54,15 +52,12 @@
                             <textarea class="form-control" style="resize:none" name="content" rows="32" ng-model="article.content"></textarea>
                         </div>
                     </tab>
-                    <tab select="markdown(article)" disabled="!(article.title || article.summary || article.content)">
+                    <tab select="markdown(article)" disabled="!article.title">
                         <tab-heading>
                             <i class="fa fa-eye"></i> Preview
                         </tab-heading>
-                        <div class="form-group">
-                            <h1 ng-if="article.title">{{article.title}}</h1>
-                            <blockquote ng-if="article.summary">{{article.summary}}</blockquote>
-                            <div ng-if="article.content" ng-bind-html="article.marked | trust"></div>
-                        </div>
+                        <ng-include src="'@routes.Assets.at("/views/articles/summary.html")'"></ng-include>
+                        <div ng-bind-html="marked(article.content) | trust"></div>
                     </tab>
                 </tabset>
             </form>

@@ -41,4 +41,9 @@ class ArticleController @Inject()(db: Database) extends Controller with MongoUti
     }
   }
 
+
+  def delete(id: String) = Action {
+    articles.findAndRemove(Map("_id" -> new ObjectId(id)))
+    Ok
+  }
 }

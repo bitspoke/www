@@ -1,0 +1,5 @@
+<h2>{{article.title}}</h2>
+<blockquote>
+    <p>{{article.summary}}</p>
+    <footer>{{article.author || 'user'}}, {{(article.date["$date"] | date:"medium") || 'today'}}</footer>
+</blockquote>
