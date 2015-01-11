@@ -1,19 +1,17 @@
-import java.io.{StringWriter, PrintWriter}
 
-import com.google.inject.Guice
-import com.tzavellas.sse.guice.ScalaModule
+import com.google.inject.{Guice, AbstractModule}
 import play.api.GlobalSettings
 import play.api.mvc.RequestHeader
 import play.api.mvc.Results.InternalServerError
-import services.{Database, RealDatabase}
+import services.{DatabaseService, MongoDatabaseService}
 
 import scala.concurrent.Future
 
 object Global extends GlobalSettings {
 
-  val injector = Guice.createInjector(new ScalaModule {
+  val injector = Guice.createInjector(new AbstractModule {
     def configure(): Unit = {
-      bind[Database].to[RealDatabase]
+      bind(classOf[DatabaseService]).to(classOf[MongoDatabaseService])
     }
   })
 

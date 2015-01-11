@@ -15,6 +15,8 @@ import utils.TestUtils
 
 class ArticleControllerSpec extends Specification with JsonMatchers with TestUtils {
 
+  val Admin = "Basic YWRtaW46YWRtaW4="
+
   "ArticleController" should {
 
     "list all articles" in withApplication {
@@ -44,15 +46,14 @@ class ArticleControllerSpec extends Specification with JsonMatchers with TestUti
 
     "create a new article" in withApplication {
 
-      val author = "giuseppe"
       val title = "Smart developers"
       val summary = "HIUwbiBOAEA2CWBrE0AuB7aB3S9Uo0wFsBXAYwAtoz0ATEIA"
       val content = "HIUwbiBOAEA2CWBrEBnaAXA9tA7pe6IGm2AtgK4DGAFtJZgCYhAAAA=="
       
       val result = route(
         FakeRequest(POST, "/articles")
+          .withHeaders(("Authorization", Admin))
           .withJsonBody(Json.obj(
-            "author" -> author,
             "title" -> title,
             "summary" -> summary,
             "content" -> content
@@ -60,14 +61,12 @@ class ArticleControllerSpec extends Specification with JsonMatchers with TestUti
       ).get
 
       status(result) must beEqualTo(OK)
-      contentType(result) must beSome(JSON)
-      contentAsString(result) must /("_id" -> sha1)
       fakeDbArticles must have size(3)
 
       val article = fakeDbArticles.findOne(Map("title" -> title))
       article must beSome
       val jsonStr = article.get.toString
-      jsonStr must /("author" -> author)
+      jsonStr must /("author" -> "admin")
       jsonStr must /("title" -> title)
       jsonStr must /("date") /("$date" -> iso8601)
       jsonStr must /("summary" -> summary)

@@ -18,7 +18,7 @@ class IntegrationSpec extends Specification {
 
       browser.goTo("http://localhost:" + port)
 
-      browser.pageSource must contain("Software made by experts")
+      browser.pageSource must contain("Bespoke software made by experts")
     }
   }
 }

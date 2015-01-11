@@ -1,24 +1,27 @@
 package controllers
 
+import bitspoke.play.security.BasicAccessAuth
 import com.google.inject.{Inject, Singleton}
 import com.mongodb.casbah.Imports._
 import play.api.mvc.{Action, Controller}
-import services.Database
+import services.DatabaseService
 import utils.MongoUtils
 
 
 @Singleton()
-class ArticleController @Inject()(db: Database) extends Controller with MongoUtils {
+class ArticleController @Inject()(db: DatabaseService)
+  extends Controller
+  with MongoUtils with BasicAccessAuth {
 
   val articles = db.collection("articles")
 
 
-  def create = Action(parse_dbObject) { request =>
+  def create = AuthAction(parse_dbObject) { request =>
     val article = request.body
     article += ("date" -> new java.util.Date)
-    // TODO += ("author" -> request.user)
+    request.user.foreach (u => article += ("author" -> u.username))
+
     articles += article
-    //TODO Ok(s"""{"_id": "${article("_id")}"}""").as(JSON)
     Ok
   }
 
@@ -34,10 +37,10 @@ class ArticleController @Inject()(db: Database) extends Controller with MongoUti
   }
 
 
-  def update(id: String) = Action(parse_dbObject) { request =>
+  def update(id: String) = AuthAction(parse_dbObject) { request =>
     val article = request.body
     article += ("date" -> new java.util.Date)
-    // TODO += ("author" -> request.user)
+
     articles.findAndModify(Map("_id" -> new ObjectId(id)), article)
     Ok
   }
