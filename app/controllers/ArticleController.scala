@@ -46,7 +46,7 @@ class ArticleController @Inject()(db: DatabaseService)
   }
 
 
-  def delete(id: String) = Action {
+  def delete(id: String) = AuthAction {
     articles.findAndRemove(Map("_id" -> new ObjectId(id)))
     Ok
   }
